@@ -37,29 +37,29 @@ class EventMapper {
             const [ , data ] = output.split(':').map(it => it.trim());
             const [ currentMin, currentMax ] = data.split(' ').map(it => it / 1000);
 
-            if (currentMin > 1900)
+            if (currentMin > 1600)
                 return;
 
-            console.log(`Boosting from ${currentMin}MHz-${currentMax}MHz to 1900MHz-4200MHz because of touch event.`);
+            console.log(`Boosting from ${currentMin}MHz-${currentMax}MHz to 1600MHz-4200MHz because of touch event.`);
 
-            if (currentMin !== 1900) {
+            if (currentMin !== 1600) {
                 this.minBeforeTouch = currentMin;
                 this.maxBeforeTouch = currentMax;
             }
 
-            cp.exec(`cpupower frequency-set --min 1900MHz --max 4200MHz`);
+            cp.exec(`cpupower frequency-set --min 1600MHz --max 4200MHz`);
             clearTimeout(this.touchThresholdTimer);
 
             this.touchThresholdTimer = setTimeout(() => {
                 if (!this.minBeforeTouch)
-                    this.minBeforeTouch = 1900;
+                    this.minBeforeTouch = 1600;
 
                 if (!this.maxBeforeTouch)
                     this.maxBeforeTouch = 4200;
 
                 console.log(`Deboosting to ${this.minBeforeTouch}MHz-${this.maxBeforeTouch}MHz.`);
                 cp.exec(`cpupower frequency-set --min ${this.minBeforeTouch}MHz --max ${this.maxBeforeTouch}MHz`);
-            }, 3500);
+            }, 2500);
         });
     }
 }
